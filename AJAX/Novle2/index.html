@@ -1,0 +1,63 @@
+<html>
+<head>
+<script type="text/javascript">
+function loadXMLDoc() {
+  var xmlhttp = new XMLHttpRequest();
+  var key = document.myform.sele.value;
+  var url = "db.jsp?ok=" + key;
+  
+  xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4) {
+      if (xmlhttp.status == 200) { // Check if the request was successful
+        var xmlDoc = xmlhttp.responseXML.documentElement;
+
+        // Handle the case where there's no data in response
+        if (xmlDoc) {
+          var stdid = xmlDoc.getElementsByTagName("stdid")[0];
+          var stdname = xmlDoc.getElementsByTagName("stdname")[0];
+          var stdage = xmlDoc.getElementsByTagName("stdage")[0];
+
+          if (stdid && stdid.childNodes[0]) {
+            document.getElementById("a").innerHTML = stdid.childNodes[0].nodeValue;
+          }
+
+          if (stdname && stdname.childNodes[0]) {
+            document.getElementById("b").innerHTML = stdname.childNodes[0].nodeValue;
+          }
+
+          if (stdage && stdage.childNodes[0]) {
+            document.getElementById("c").innerHTML = stdage.childNodes[0].nodeValue;
+          }
+        } else {
+          document.getElementById("a").innerHTML = "Not found";
+          document.getElementById("b").innerHTML = "Not found";
+          document.getElementById("c").innerHTML = "Not found";
+        }
+      } else {
+        console.error("HTTP error: " + xmlhttp.status);
+      }
+    }
+  };
+
+  xmlhttp.open("GET", url, true);
+  xmlhttp.send();
+}
+
+</script>
+</head>
+<body>
+
+<form name="myform">
+<select name="sele" onchange="loadXMLDoc()">
+  <option value="45">45</option>
+  <option value="46">46</option>
+  <option value="47">47</option>
+</select>
+</form>
+
+id:<span id="a"></span><br>
+First name:<span id="b"></span><br>
+Age:<span id="c"></span><br>
+
+</body>
+</html>
